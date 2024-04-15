@@ -193,71 +193,71 @@
                         <!-- Row 1 -->
                         <tr>
                             <td>CPU</td>
-                            <td><button><a href="Parts pages/cpu.html">Add</button></a></td>
-                            <td>No part added yet.</td>
+                            <td><button class="director cpu"><a>Add</a></button></td>
+                            <td class="cpu">No part added yet.</td>
                             <td><button>X</button></td>
                         </tr>
                         <!-- Row 2 -->
                         <tr>
                             <td>CPU cooler</td>
-                            <td><button><a href="Parts pages/cpu_cooler.html">Add</button></a></td>
-                            <td>No part added yet.</td>
+                            <td><button class="director cpu-cooler"><a>Add</a></button></td>
+                            <td class="cpu-cooler">No part added yet.</td>
                             <td><button>X</button></td>
                         </tr>
                         <!-- Row 3 -->
                         <tr>
                             <td>Motherboard</td>
-                            <td><button><a href="Parts pages/motherboard.html">Add</button></a></td>
-                            <td>No part added yet.</td>
+                            <td><button class="director motherboard"><a>Add</a></button></td>
+                            <td class="motherboard">No part added yet.</td>
                             <td><button>X</button></td>
                         </tr>
                         <!-- Row 4 -->
                         <tr>
                             <td>Memory</td>
-                            <td><button><a href="Parts pages/memory.html">Add</button></a></td>
-                            <td>No part added yet.</td>
+                            <td><button class="director memory"><a>Add</a></button></td>
+                            <td class="memory">No part added yet.</td>
                             <td><button>X</button></td>
                         </tr>
                         <!-- Row 5 -->
                         <tr>
                             <td>Storage</td>
-                            <td><button><a href="Parts pages/storage.html">Add</button></a></td>
-                            <td>No part added yet.</td>
+                            <td><button class="director external-hard-drive"><a>Add</a></button></td>
+                            <td class="external-hard-drive">No part added yet.</td>
                             <td><button>X</button></td>
                         </tr>
                         <!-- Row 6 -->
                         <tr>
                             <td>Video card</td>
-                            <td><button><a href="Parts pages/video_card.html">Add</button></a></td>
-                            <td>No part added yet.</td>
-                            <td><button>X</button></td>
+                            <td><button class="director video-card"><a>Add</a></button></td>
+                            <td class="video-card">No part added yet.</td>
+                            <td><button >X</button></td>
                         </tr>
                         <!-- Row 7 -->
                         <tr>
                             <td>Case</td>
-                            <td><button><a href="Parts pages/case.html">Add</button></a></td>
-                            <td>No part added yet.</td>
+                            <td><button class="director case"><a>Add</a></button></td>
+                            <td class="case">No part added yet.</td>
                             <td><button>X</button></td>
                         </tr>
                         <!-- Row 8 -->
                         <tr>
                             <td>Power supply</td>
-                            <td><button><a href="Parts pages/power_supply.html">Add</button></a></td>
-                            <td>No part added yet.</td>
+                            <td><button class="director power-supply"><a>Add</a></button></td>
+                            <td class="power-supply">No part added yet.</td>
                             <td><button>X</button></td>
                         </tr>
                         <!-- Row 9 -->
                         <tr>
                             <td>Operating system</td>
-                            <td><button><a href="Parts pages/operating_system.html">Add</button></a></td>
-                            <td>No part added yet.</td>
+                            <td><button class="director os"><a>Add</a></button></td>
+                            <td class="os">No part added yet.</td>
                             <td><button>X</button></td>
                         </tr>
                         <!-- Row 10 -->
                         <tr>
                             <td>Monitor</td>
-                            <td><button><a href="Parts pages/monitor.html">Add</button></a></td>
-                            <td>No part added yet.</td>
+                            <td><button class="director monitor"><a>Add</a></button></td>
+                            <td class="monitor">No part added yet.</td>
                             <td><button>X</button></td>
                         </tr>
                     </tbody>
@@ -287,21 +287,58 @@
             </footer>
         </div>
     </main>
-
     <script>
         window.onscroll = function () { myFunction() };
-
-        var navbar = document.getElementById("navbar");
-        var sticky = navbar.offsetTop;
-
         function myFunction() {
-            if (window.pageYOffset >= sticky) {
+            if (window.scrollY >= sticky) {
                 navbar.classList.add("sticky")
             } else {
                 navbar.classList.remove("sticky");
             }
         }
+        window.addEventListener("load", () => {
+            // lazy button event assign Zzz
+            for (let i = 0; i < directors.length; i++) {
+                const selected = directors[i];
+                console.log(selected);
+                selected.addEventListener("click", () => {
+                    directTo(selected.getAttribute("class").split(" ")[1]);
+                })
+            }
+        })
+        const navbar = document.getElementById("navbar");
+        const sticky = navbar.offsetTop;
+
+        const directors = document.getElementsByClassName("director");
+
+
+        // load stored data from other pages
+        window.addEventListener("load", () => {
+            Object.keys(localStorage).forEach((key) => {
+                // whitelist the desirable :)
+                switch (key) {
+                    case "cpu":
+                    case "cpu-cooler":
+                    case "motherboard":
+                    case "memory":
+                    case "external-hard-drive":
+                    case "video-card":
+                    case "case":
+                    case "power-supply":
+                    case "os":
+                    case "monitor":
+                        document.querySelector("td."+key).innerText = localStorage.getItem(key).split(",");
+                        break
+                    default:
+                        console.log("caught a stray!" + key);
+                }
+            })
+        })
+        // smart code to basically send the correct data to the part-select page to load its Jsons etc
+        function directTo(direction) {
+            localStorage.setItem("selecting", direction);
+            location.href = "partPages/part_select.html";
+        }
     </script>
 </body>
-
 </html>
